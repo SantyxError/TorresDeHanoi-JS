@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="author" content="Santiago Benito">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="js.js"></script>
+    <title>TOrres de Hanoi</title>
+  </head>
+  <body >
+
+    <div id="juegoContenedor" >
+    <label for="NumDiscos">
+      Nº discos
+      <input type="number" max="5" min="1" value="3" />
+    </label>
+
+    <br>
+    <br>
+    <label for="Origen">
+      Origen
+      <select name="Origen" id="Origen">
+        <option value="Elige">Elige...</option>
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+      </select>
+
+      <br>
+      <br>
+    <label for="Origen">
+      Destino
+      <select name="Destino" id="Destino">
+        <option value="Elige">Elige...</option>
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+      </select>
+    </label>
+
+    <br>
+    <br>
+
+    <input type="button" value="RESOLVER">
+    <input type="button" value="BORRAR" onClick = "resetJuego()">
+
+  </div>
+
+  <br>
+
+  <canvas id="rectangulo" width="300" height="150" style="border: 1px solid"> 
+  </canvas>
+  </body>
+</html>
