@@ -6,21 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="js.js"></script>
-    <title>TOrres de Hanoi</title>
+    <title>Torres de Hanoi</title>
   </head>
   <body >
 
     <div id="juegoContenedor" >
     <label for="NumDiscos">
       Nº discos
-      <input type="number" max="5" min="1" value="3" />
+      <input type="number" name="numero de discos" id="NumDiscos" onchange="juegoInicio()" onkeydown="return false" min="1" max="5" value="3">
     </label>
 
     <br>
     <br>
     <label for="Origen">
       Origen
-      <select name="Origen" id="Origen">
+      <select name="Origen" id="Origen" onchange="juegoInicio()">
         <option value="Elige">Elige...</option>
         <option>A</option>
         <option>B</option>
@@ -42,14 +42,16 @@
     <br>
     <br>
 
-    <input type="button" value="RESOLVER">
-    <input type="button" value="BORRAR" onClick = "resetJuego()">
+    <button type="button" onclick="resolver()" >RESOLVER</button>
+		<button type="button" onclick="reset()"> RESET</button>
 
   </div>
 
   <br>
 
-  <canvas id="rectangulo" width="300" height="150" style="border: 1px solid"> 
+    <canvas id="rectangulo" width="300" height="150" style="border: 1px solid black; background-image: url('img/wallpaperbetter.com_1366x768.jpg'); background-size:cover;"  > 
   </canvas>
+
+  <div id="movimientos"></div>
   </body>
 </html>

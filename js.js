@@ -1,146 +1,162 @@
-var cuerpo;
+window.addEventListener("load", palos);
 
-/** MOVIMIENTOS */
-function hanoi(n, ori, des, aux) {
-  if (n == 1)
-    document.write(
-      "Mueva el disco " +
-        n +
-        "desde la Torre " +
-        ori +
-        " hasta la Torre " +
-        des +
-        "<br/> "
-    );
-  else {
-    hanoi(n - 1, ori, aux, des);
-    document.write(
-      "Mueva el disco " +
-        n +
-        "desde la Torre " +
-        ori +
-        " hasta la Torre " +
-        des +
-        "<br/> "
-    );
-    hanoi(n - 1, aux, des, ori);
-  }
-}
+let paloA = 11;
+let paloB = 111;
+let paloC = 211;
+let colorDiscos = ["#012a4a", "#01497c", "#2a6f97", "#468faf", "#89c2d9"];
+let mensaje = "";
+let cont = 1;
 
-/** HISTORIAL DE MOVIMIENTOS AL RESOLVER */
+//FUNCION RESOLVER -> Resuelve el rommpecabezas
+function resolver() {
+  let origen = document.getElementById("Origen").value;
+  let destino = document.getElementById("Destino").value;
+  let discos = document.getElementById("NumDiscos").value;
 
-resolver(3, "A", "C", "B");
-
-function resolver(disk, start, destination, staging) {
-  if (disk == 1) {
-    // base case of 1 disk, we know how to solve that
-    document.write(") Mover de " + start + " a " + destination + ".<br/>");
+  if (origen == destino || origen == "elige..." || destino == "elige...") {
+    alert("Movimiento no Permitido");
   } else {
-    // first solve for 6 disks (i.e., disk - 1)
-    resolver(disk - 1, start, staging, destination);
-
-    // now move the 7th disk
-    document.write(") Mover de " + start + " a " + destination + ".<br/>");
-
-    // now solve for the 6 disks from post B to post C
-    resolver(disk - 1, staging, destination, start);
+    let auxiliar = aux(origen, destino);
+    mensaje = "";
+    cont = 1;
+    hanoi(discos, origen, destino, auxiliar);
+    juegoResuelto();
   }
 }
 
-/* function countup(n) {
-  if (n < 1) {
-    return [];
+//FUNCION AUXILIAR
+function aux(origen, destino) {
+  let auxiliar;
+
+  if (origen == "A" && destino == "B") {
+    auxiliar = "C";
+  } else if (origen == "A" && destino == "C") {
+    auxiliar = "B";
   } else {
-    const countArray = countup(n - 1);
-    countArray.push(n);
-    console.log("n :>> ", n);
-    return countArray;
+    auxiliar = "A";
+  }
+
+  return auxiliar;
+}
+
+//FUNCION HANOI -> Calcula los movimientos necesarios para resolver el rompecabezas. Esta función necesita cuatro parámetros de entrada: número de discos, poste origen, poste auxiliar y poste destino.
+function hanoi(discos, origen, destino, auxiliar) {
+  if (discos == 1) {
+    mensaje +=
+      "<br>" +
+      cont +
+      ") Mover disco del palo " +
+      origen +
+      " al palo " +
+      destino;
+    cont++;
+  } else {
+    hanoi(discos - 1, origen, auxiliar, destino);
+    mensaje +=
+      "<br>" +
+      cont +
+      ") Mover disco del palo " +
+      origen +
+      " al palo " +
+      destino;
+    cont++;
+    hanoi(discos - 1, auxiliar, destino, origen);
+  }
+  document.querySelector("#movimientos").innerHTML = mensaje;
+}
+
+// FUNCIÓN DE ORIGEN
+function juegoInicio() {
+  let origen = document.getElementById("Origen").value;
+  let discos = document.getElementById("NumDiscos").value;
+
+  if (origen == "A") {
+    discosPosicion(discos, paloA);
+  }
+  if (origen == "B") {
+    discosPosicion(discos, paloB);
+  }
+  if (origen == "C") {
+    discosPosicion(discos, paloC);
+  }
+  if (origen == "elige...") {
+    limpiarRectangulo();
   }
 }
-countup(5);
- */
 
-/** RESET */
-function resetJuego() {
-  document.getElementById("juegoContenedor").reset();
-}
+//FUNCIÓN DEL JUEGO RESUELTO
+function juegoResuelto() {
+  let destino = document.getElementById("Destino").value;
+  let discos = document.getElementById("NumDiscos").value;
 
-/**---------------------------------------------CANVAS--------------------------------------------------------- */
-
-function graficos() {
-  let canvas = document.getElementById("rectangulo");
-  if (canvas.getContext) {
-    let rectangulo = canvas.getContext("2d");
-
-    /** LETRAS */
-    letras();
-    /** PALOS */
-    palos();
-    //**DISCOS */
-    discos();
+  if (destino == "A") {
+    discosPosicion(discos, paloA);
+  }
+  if (destino == "B") {
+    discosPosicion(discos, paloB);
+  }
+  if (destino == "C") {
+    discosPosicion(discos, paloC);
   }
 }
 
-function reset() {
-  canvas = document.getElementById("rectangulo");
-  if (canvas.getContext) {
-    lienzoreset = canvas.getContext("2d");
-    lienzoreset.fillStyle = "white";
-    lienzoreset.fillRect(0, 0, canvas.width, canvas.height);
-  }
-  palos();
-  letras();
-}
+//DIBUJO DE LOS DISCOS
+function discosPosicion(num, palo) {
+  let altura = 130;
+  let colocacion = 0;
+  let anchura = 80;
+  limpiarRectangulo();
+  for (i = 0; i < num; i++) {
+    let canvas = document.getElementById("rectangulo");
+    if (canvas.getContext) {
+      let rectangulo = canvas.getContext("2d");
 
-function letras() {
-  let canvas = document.getElementById("rectangulo");
-  if (canvas.getContext) {
-    let rectangulo = canvas.getContext("2d");
+      rectangulo.fillStyle = colorDiscos[i];
+      rectangulo.fillRect(palo + colocacion, altura, anchura, 20);
 
-    rectangulo.font = "bold 18px Arial";
-    rectangulo.fillText("A", 45, 20, 10, 130);
-    rectangulo.fillText("B", 145, 20, 10, 130);
-    rectangulo.fillText("C", 245, 20, 10, 130);
+      colocacion += 5;
+      altura -= 20;
+      anchura -= 10;
+    }
   }
 }
 
+//DIBUJO DE LOS PALOS
 function palos() {
   let canvas = document.getElementById("rectangulo");
   if (canvas.getContext) {
     let rectangulo = canvas.getContext("2d");
 
-    rectangulo.fillStyle = "#f0e68c";
-    rectangulo.fillRect(45, 30, 10, 130); //Distancia desde Izquierda, distancia desde arriba, grosor desde izquierda a la derecha, largura desde arriba hasta abajo
+    rectangulo.font = "bold 18px Arial";
+    rectangulo.fillStyle = "black";
+    rectangulo.fillText("A", 45, 20, 10, 130); //Distancia desde Izquierda, distancia desde arriba, grosor desde izquierda a la derecha, largura desde arriba hasta abajo
+    rectangulo.fillText("B", 145, 20, 10, 130);
+    rectangulo.fillText("C", 245, 20, 10, 130);
+
+    rectangulo.fillStyle = "#ffd166";
+    rectangulo.fillRect(45, 30, 10, 130);
     rectangulo.fillRect(145, 30, 10, 130);
     rectangulo.fillRect(245, 30, 10, 130);
   }
 }
 
-function discos() {
+//FUNCiÓN RESET -> limpiaremos todo el canvas
+
+function limpiarRectangulo() {
   let canvas = document.getElementById("rectangulo");
+
   if (canvas.getContext) {
-    let disco1 = canvas.getContext("2d");
-
-    /** DISCO1*/
-    disco1.fillStyle = "green";
-    disco1.fillRect(5, 130, 92, 20); //el disco mide 90
-
-    /** DISCO2*/
-    disco1.fillStyle = "yellow";
-    disco1.fillRect(13, 110, 75, 20); //el disco mide 80
-
-    /** DISCO3*/
-    disco1.fillStyle = "red";
-    disco1.fillRect(21, 90, 58, 20); //el disco mide 70
-
-    /** DISCO4*/
-    disco1.fillStyle = "purple";
-    disco1.fillRect(29, 70, 42, 20); //el disco mide 60
-
-    /** DISCO5*/
-    disco1.fillStyle = "blue";
-    disco1.fillRect(37, 50, 25, 20); //el disco mide 50
+    let rectangulo = canvas.getContext("2d");
+    rectangulo.clearRect(0, 0, 300, 150);
+    palos();
   }
 }
 
-window.addEventListener("load", graficos); //cargamos la página con los gráficos al comenzar
+function reset() {
+  document.getElementById("NumDiscos").value = 3;
+  document.getElementById("Origen").value = "elige...";
+  document.getElementById("Destino").value = "elige...";
+  document.querySelector("#movimientos").innerHTML = "";
+  limpiarRectangulo();
+  cont = 1;
+}
